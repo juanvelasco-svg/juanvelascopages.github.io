@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar y Éxito Universitario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Soft Accents -->
+    <!-- Application Structure Plan: The application is designed as a narrative journey. It starts with a Hero section to engage the user. Section 1 (Challenges) uses interactive cards to make the information digestible without overwhelming the user. Section 2 (Solutions) uses a radar chart for Emotional Intelligence and info cards for Social Skills to visually explain these abstract concepts. Section 3 (High Intelligence) uses a toggle to create a direct, interactive comparison. Section 4 (Toolkit) acts as a practical, actionable conclusion, consolidating all resources into a filterable gallery. This structure guides the user from problem-awareness to solution-empowerment, prioritizing exploration and usability over a static report format. -->
+    <!-- Visualization & Content Choices: 1. Challenges: Report Info -> 10 emotional challenges. Goal -> Inform/Organize. Viz -> Interactive Cards. Interaction -> Click to expand. Justification -> Avoids a long, intimidating list; encourages focused exploration. Library -> HTML/CSS/JS. 2. IE Dimensions: Report Info -> 5 dimensions of IE. Goal -> Compare/Inform. Viz -> Radar Chart. Interaction -> Hover for details. Justification -> Visualizes the interconnected nature of IE components effectively. Library -> Chart.js. 3. Social Skills: Report Info -> Impacts of social skills. Goal -> Inform. Viz -> Icon-based grid. Interaction -> Hover effects. Justification -> Scannable and visually appealing. Library -> HTML/CSS. 4. High Intelligence: Report Info -> High vs. Low IE impact. Goal -> Compare. Viz -> Toggle switch. Interaction -> Click to switch views. Justification -> Creates a powerful, direct comparison. Library -> HTML/CSS/JS. 5. Resources: Report Info -> Recommended apps/videos. Goal -> Provide tools. Viz -> Filterable gallery. Interaction -> Filter buttons. Justification -> Highly practical and user-centric. Library -> HTML/CSS/JS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #F8F7F4;
+            color: #2d3748;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2c7a7b;
+            border-bottom-color: #2c7a7b;
+        }
+        .challenge-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .details-panel.open {
+            max-height: 500px;
+        }
+        .special-challenge {
+            border: 2px solid #E57373;
+            background-color: #FEF2F2;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+            max-width: 500px;
+            max-height: 500px;
+        }
+        .resource-card {
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active {
+            background-color: #2c7a7b;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">Bienestar y Exito Universitario</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#desafios" class="nav-link">Desafíos</a>
+                <a href="#soluciones" class="nav-link">Soluciones</a>
+                <a href="#alta-inteligencia" class="nav-link">Alta Inteligencia</a>
+                <a href="#herramientas" class="nav-link">Herramientas</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 text-center bg-teal-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-teal-900 mb-4">Navega tu Primer Año con Éxito</h2>
+                <p class="text-lg text-teal-800 max-w-3xl mx-auto">Descubre cómo la inteligencia emocional y las habilidades sociales son clave para superar los retos universitarios y potenciar tu rendimiento académico.</p>
+            </div>
+        </section>
+
+        <section id="desafios" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-800">Los 10 Retos Emocionales del Estudiante (IE)</h3>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">El primer año universitario es una etapa de grandes cambios. Identificar los desafíos es el primer paso para superarlos. Haz clic en cada reto para explorar sus detalles y encontrar recursos útiles.</p>
+                </div>
+                <div id="challenges-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="soluciones" class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-800">El Marco para el Éxito</h3>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">La Inteligencia Emocional y las Habilidades Sociales no son solo conceptos, son competencias prácticas que predicen el éxito académico y el bienestar personal. Explora sus dimensiones clave.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 lg:order-1">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-4">Dimensiones de la Inteligencia Emocional</h4>
+                        <p class="text-gray-600 mb-6">La IE es tu capacidad para identificar, entender y gestionar tus emociones y las de los demás. Cada dimensión juega un papel crucial en tu adaptación y rendimiento. Pasa el cursor sobre el gráfico para ver el impacto de cada una.</p>
+                        <div class="chart-container">
+                            <canvas id="ieChart"></canvas>
+                        </div>
+                         <p class="text-xs text-gray-500 mt-4 text-center">Basado en investigaciones que identifican la autogestión y la regulación emocional como los predictores más fuertes del rendimiento académico.</p>
+                    </div>
+                    <div class="order-1 lg:order-2">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-6">Impacto de las Habilidades Sociales</h4>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <span class="text-2xl mr-4">🤝</span>
+                                <div>
+                                    <h5 class="font-bold">Colaboración y Trabajo en Equipo</h5>
+                                    <p class="text-sm text-gray-600">Facilitan la participación en proyectos grupales, mejorando el aprendizaje.</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <span class="text-2xl mr-4">😊</span>
+                                <div>
+                                    <h5 class="font-bold">Ambiente de Aprendizaje Positivo</h5>
+                                    <p class="text-sm text-gray-600">Fomentan un entorno seguro y motivador donde te sientes aceptado.</p>
+                                </div>
+                            </div>
+                             <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <span class="text-2xl mr-4">🔗</span>
+                                <div>
+                                    <h5 class="font-bold">Integración y Pertenencia</h5>
+                                    <p class="text-sm text-gray-600">Reducen el aislamiento y la soledad, claves para el bienestar.</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <span class="text-2xl mr-4">💪</span>
+                                <div>
+                                    <h5 class="font-bold">Autoestima y Asertividad</h5>
+                                    <p class="text-sm text-gray-600">Aumentan la confianza para expresar ideas y participar activamente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="alta-inteligencia" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-800">Foco Especial: Alta Inteligencia</h3>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Tener una alta capacidad intelectual presenta oportunidades y desafíos únicos. La inteligencia emocional es el factor que determina si esta capacidad se traduce en bienestar o en vulnerabilidad.</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+                    <div id="ai-toggle-container">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="herramientas" class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-800">Tu Caja de Herramientas Digital</h3>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Aquí tienes una colección de las apps y recursos recomendados. Fíltralos según el desafío que quieras abordar para encontrar la herramienta perfecta para ti.</p>
+                </div>
+                <div id="filters-container" class="flex flex-wrap justify-center gap-2 mb-8">
+                </div>
+                <div id="resources-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>Esta es una herramienta informativa basada en investigaciones sobre el bienestar estudiantil.</p>
+            <p class="text-sm text-gray-400 mt-2">Si sientes que necesitas ayuda, no dudes en contactar los servicios de consejería de tu universidad.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const challengesData = [
+        { id: 1, tag: 'Estrés', title: 'Estrés y Ansiedad', icon: '🤯', description: 'Presión por el volumen de trabajo, exámenes y miedo al fracaso. Común experimentar ansiedad por el rendimiento y la adaptación al nuevo entorno.', resources: [{type: 'App', name: 'Headspace'}, {type: 'Video', name: 'LA SALUD MENTAL EN LOS JÓVENES'}] },
+        { id: 2, tag: 'Procrastinación', title: 'Procrastinación', icon: '⏰', description: 'Posponer tareas se vuelve un serio obstáculo, ligado a la falta de autogestión, miedo al fracaso o perfeccionismo. Afecta el rendimiento y eleva la ansiedad.', resources: [{type: 'App', name: 'QuizCat AI'}, {type: 'App', name: 'Freedom'}, {type: 'App', name: 'RescueTime'}, {type: 'Video', name: 'Mente de un procrastinador'}] },
+        { id: 3, tag: 'Soledad', title: 'Soledad e Integración', icon: '👤', description: 'Sentimientos de aislamiento por estar lejos de casa y la dificultad de hacer nuevas amistades. Un reto emocional significativo.', resources: [{type: 'App', name: 'TalkLife'}, {type: 'Video', name: 'Cerebro de un adolescente'}] },
+        { id: 4, tag: 'Independencia', title: 'Adaptación a la Independencia', icon: '🏡', description: 'Inseguridad por la gestión de tiempo, finanzas y hábitos saludables al vivir de forma autónoma por primera vez.', resources: [{type: 'App', name: 'Taskade'}, {type: 'Video', name: 'Transiciones: primer año'}] },
+        { id: 5, tag: 'Emociones', title: 'Inmadurez Emocional', icon: '🎭', description: 'Falta de estrategias para regular emociones intensas como la frustración o el enojo, obstaculizando la toma de decisiones.', resources: [{type: 'App', name: 'Happify'}, {type: 'Video', name: 'La salud mental es salud'}] },
+        { id: 6, tag: 'Alta Inteligencia', title: 'Altas Expectativas y Perfeccionismo', icon: '🎯', description: 'Presión interna/externa por la excelencia constante. Puede generar ansiedad, miedo al error y frustración si no se cumplen estándares muy altos.', isSpecial: true, resources: [{type: 'App', name: 'Calm'}] },
+        { id: 7, tag: 'Organización', title: 'Sobrecarga y Desorganización', icon: '📚', description: 'Participar en demasiadas actividades académicas y sociales puede llevar a la saturación, agotamiento y desbordamiento emocional.', resources: [{type: 'App', name: 'Reclaim.ai'}] },
+        { id: 8, tag: 'Ayuda', title: 'Dificultad para Pedir Ayuda', icon: '🤝', description: 'Por orgullo, vergüenza o miedo al estigma, muchos evitan buscar apoyo, agravando sus problemas emocionales.', resources: [{type: 'App', name: 'Sanvello'}, {type: 'Video', name: '¿Por qué cuesta pedir ayuda?'}] },
+        { id: 9, tag: 'Autoestima', title: 'Gestión de la Autoestima', icon: '💖', description: 'El cambio de entorno puede afectar la confianza, especialmente al compararse con compañeros o enfrentar dificultades académicas inesperadas.', resources: [{type: 'App', name: 'How We Feel'}] },
+        { id: 10, tag: 'Alta Inteligencia', title: 'Aburrimiento o Falta de Estímulo', icon: '💡', description: 'Estudiantes con alta capacidad pueden sentirse desmotivados si los desafíos no están a su altura, conduciendo a la apatía o desinterés.', isSpecial: true, resources: [{type: 'App', name: 'QuizCat AI'}] }
+    ];
+
+    const resourcesData = [
+        { name: 'Headspace', type: 'App', category: 'Estrés', description: 'Meditación y manejo del estrés.' },
+        { name: 'QuizCat AI', type: 'App', category: 'Procrastinación', description: 'Para estudiar sin distracciones y aprendizaje adaptativo.' },
+        { name: 'Freedom', type: 'App', category: 'Procrastinación', description: 'Bloqueo de distracciones en tus dispositivos.' },
+        { name: 'RescueTime', type: 'App', category: 'Procrastinación', description: 'Seguimiento automático de la productividad.' },
+        { name: 'TalkLife', type: 'App', category: 'Soledad', description: 'Red social de apoyo emocional entre pares.' },
+        { name: 'Taskade', type: 'App', category: 'Independencia', description: 'Gestión y organización de tareas y proyectos.' },
+        { name: 'Happify', type: 'App', category: 'Emociones', description: 'Entrenamiento emocional a través de juegos y ejercicios.' },
+        { name: 'Calm', type: 'App', category: 'Alta Inteligencia', description: 'Meditación guiada para manejar la ansiedad.' },
+        { name: 'Reclaim.ai', type: 'App', category: 'Organización', description: 'Programador inteligente de tareas y calendario.' },
+        { name: 'Sanvello', type: 'App', category: 'Ayuda', description: 'Plataforma integral de apoyo y autogestión emocional.' },
+        { name: 'How We Feel', type: 'App', category: 'Autoestima', description: 'Diario emocional para identificar patrones.' },
+    ];
+
+    const highIntelligenceData = {
+        benefits: [
+            { title: 'Mejor Manejo del Estrés', text: 'Capacidad superior para gestionar la presión académica, reduciendo el riesgo de abandono.' },
+            { title: 'Autoregulación y Resiliencia', text: 'Mayor tolerancia a la frustración y perseverancia en el aprendizaje.' },
+            { title: 'Empatía y Relaciones', text: 'Evitan el aislamiento y se integran eficazmente en equipos de trabajo.' },
+            { title: 'Motivación Intrínseca', text: 'Facilita la autodisciplina y el establecimiento de metas personales significativas.' }
+        ],
+        challenges: [
+            { title: 'Ansiedad y Perfeccionismo', text: 'Son más susceptibles a la ansiedad elevada y al perfeccionismo debilitante.' },
+            { title: 'Aislamiento Social', text: 'La falta de habilidades sociales puede llevar a dificultades para integrarse en equipos.' },
+            { title: 'Vulnerabilidad Emocional', text: 'Sin IE, la alta inteligencia no protege contra trastornos como la depresión o el estrés.' },
+            { title: 'Desconexión Motivacional', text: 'Pueden perder la motivación si no encuentran un propósito más allá de las calificaciones.' }
+        ]
+    };
+
+    const challengesGrid = document.getElementById('challenges-grid');
+    challengesData.forEach(challenge => {
+        const card = document.createElement('div');
+        card.className = `challenge-card bg-white rounded-lg shadow-md p-6 cursor-pointer ${challenge.isSpecial ? 'special-challenge' : ''}`;
+        card.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-3xl mr-4">${challenge.icon}</span>
+                    <h4 class="text-lg font-bold text-gray-800">${challenge.title}</h4>
+                </div>
+                <span class="text-teal-500 transform transition-transform duration-500">&#9662;</span>
+            </div>
+            <div class="details-panel mt-4 text-gray-600">
+                <p>${challenge.description}</p>
+            </div>
+        `;
+        challengesGrid.appendChild(card);
+
+        card.addEventListener('click', () => {
+            const details = card.querySelector('.details-panel');
+            const arrow = card.querySelector('span.text-teal-500');
+            const wasOpen = details.classList.contains('open');
+
+            document.querySelectorAll('.details-panel.open').forEach(panel => {
+                panel.classList.remove('open');
+                panel.closest('.challenge-card').querySelector('span.text-teal-500').style.transform = 'rotate(0deg)';
+            });
+
+            if(!wasOpen) {
+                details.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+
+    const ieChartCtx = document.getElementById('ieChart').getContext('2d');
+    const ieChart = new Chart(ieChartCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Autoconciencia', 'Autogestión', 'Empatía', 'Habilidades Sociales', 'Regulación Emocional'],
+            datasets: [{
+                label: 'Impacto en el Éxito Académico',
+                data: [4, 5, 4, 4, 5],
+                backgroundColor: 'rgba(44, 122, 122, 0.2)',
+                borderColor: 'rgba(44, 122, 122, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(44, 122, 122, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(44, 122, 122, 1)'
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                    pointLabels: { 
+                        font: { size: 12, weight: 'bold' },
+                        color: '#4a5568'
+                    },
+                    ticks: {
+                        display: false,
+                        beginAtZero: true,
+                        max: 5,
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const labels = [
+                                'Reconocer fortalezas y debilidades.',
+                                'Manejar estrés y procrastinación. Predictor clave.',
+                                'Mejorar la integración y colaboración.',
+                                'Facilitar la comunicación y el trabajo en equipo.',
+                                'Mantener la calma bajo presión. Predictor clave.'
+                            ];
+                            return labels[context.dataIndex];
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const aiToggleContainer = document.getElementById('ai-toggle-container');
+    function renderAIToggle(view) {
+        const data = view === 'benefits' ? highIntelligenceData.benefits : highIntelligenceData.challenges;
+        const title = view === 'benefits' ? '✅ Beneficios de una IE Alta' : '⚠️ Desafíos de una IE Baja';
+        const buttonText = view === 'benefits' ? 'Ver Desafíos' : 'Ver Beneficios';
+        const buttonView = view === 'benefits' ? 'challenges' : 'benefits';
+
+        aiToggleContainer.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-2xl font-bold">${title}</h4>
+                <button id="ai-toggle-btn" data-view="${buttonView}" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition">${buttonText}</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+                ${data.map(item => `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h5 class="font-bold text-gray-800">${item.title}</h5>
+                        <p class="text-sm text-gray-600">${item.text}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        document.getElementById('ai-toggle-btn').addEventListener('click', (e) => {
+            renderAIToggle(e.target.dataset.view);
+        });
+    }
+    renderAIToggle('benefits');
+
+    const filtersContainer = document.getElementById('filters-container');
+    const resourcesGrid = document.getElementById('resources-grid');
+    const categories = ['Todos', ...new Set(challengesData.map(c => c.tag))];
+
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.className = 'filter-btn px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-full shadow-sm hover:bg-gray-100 transition';
+        if (category === 'Todos') button.classList.add('active');
+        button.textContent = category;
+        button.dataset.filter = category;
+        filtersContainer.appendChild(button);
+    });
+
+    function renderResources(filter = 'Todos') {
+        resourcesGrid.innerHTML = '';
+        let filteredResources;
+        if (filter === 'Todos') {
+            filteredResources = resourcesData;
+        } else {
+            const challengeIds = challengesData.filter(c => c.tag === filter).map(c => c.id);
+            filteredResources = resourcesData.filter(r => r.category === filter);
+        }
+
+        filteredResources.forEach(resource => {
+            const card = document.createElement('div');
+            card.className = 'resource-card bg-white p-4 rounded-lg shadow-sm flex flex-col justify-between';
+            card.innerHTML = `
+                <div>
+                    <span class="px-2 py-1 text-xs font-semibold ${resource.type === 'App' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'} rounded-full">${resource.type}</span>
+                    <h5 class="font-bold mt-2">${resource.name}</h5>
+                    <p class="text-sm text-gray-600 mt-1">${resource.description}</p>
+                </div>
+            `;
+            resourcesGrid.appendChild(card);
+        });
+    }
+
+    filtersContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            renderResources(e.target.dataset.filter);
+        }
+    });
+
+    renderResources();
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+});
+</script>
+
+</body>
+</html>
